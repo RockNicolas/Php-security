@@ -1,15 +1,27 @@
 <?php
-$conn = mysqli_connect("localhost", "root", "", "security");
+require_once 'vendor/autoload.php';
+
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->load();
+
+$db_host = $_ENV['DB_HOST'];
+$db_user = $_ENV['DB_USER'];
+$db_pass = $_ENV['DB_PASS'];
+$db_name = $_ENV['DB_NAME'];
+
+$conn = mysqli_connect($db_host, $db_user, $db_pass, $db_name);
 
 if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
+
 $id = $_GET["id"];
 
 if (!is_numeric($id)) {
     echo "Seu IP foi gravado: " . $_SERVER["REMOTE_ADDR"];
     exit;
 }
+
 $sql = "SELECT * FROM news WHERE id = $id";
 $query = mysqli_query($conn, $sql);
 $dados = mysqli_fetch_array($query);
@@ -43,4 +55,4 @@ while ($Comentario = mysqli_fetch_array($ExecutaBuscaComentarios)) {
 
 <?php
 mysqli_close($conn);
-?>
+?> 
